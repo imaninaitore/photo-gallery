@@ -1,3 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+
 <h1>Photo Gallery</h1>
 
-<p>Welcome to our collection of photos, portraits, and artwork.</p>
+{% for photo in photos %}
+
+    <h2>{{ photo.title }}</h2>
+
+    <p>{{ photo.description }}</p>
+
+    <p>Tags: {{ photo.tags }}</p>
+
+{% endfor %}
+
+{% endblock %}
