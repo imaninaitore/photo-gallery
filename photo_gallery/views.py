@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from .models import Photo
 
 # Create your views here.
 def home(request):
@@ -6,4 +7,6 @@ def home(request):
 def about(request):
     return render(request, "about.html")
 def gallery(request):
-    return render(request, "gallery.html")
+    photos = Photo.objects.all()
+
+    return render(request, "gallery.html", {"photos": photos})
