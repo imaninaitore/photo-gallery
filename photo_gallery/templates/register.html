@@ -1,0 +1,69 @@
+<!--
+    Extend our base template.
+
+    This means register.html will use
+    the navbar and general structure
+    from base.html.
+-->
+{% extends "base.html" %}
+
+
+<!--
+    Everything between these tags
+    goes inside the content block
+    from base.html.
+-->
+{% block content %}
+
+    <!-- Page heading -->
+    <h1>Create Account</h1>
+
+
+    <!--
+        This form sends information back
+        to the same URL.
+
+        POST means we are submitting data.
+    -->
+    <form method="POST">
+
+        <!--
+            CSRF protection.
+
+            Django requires this token
+            for POST forms.
+        -->
+        {% csrf_token %}
+
+
+        <!--
+            Display all the fields created
+            by RegisterForm.
+
+            .as_p puts each field inside
+            a paragraph.
+        -->
+        {{ form.as_p }}
+
+
+        <!-- Submit the form -->
+        <button type="submit">
+            Register
+        </button>
+
+    </form>
+
+
+    <!--
+        If the user already has an account,
+        give them a link to login.
+    -->
+    <p>
+        Already have an account?
+
+        <a href="{% url 'login' %}">
+            Login
+        </a>
+    </p>
+
+{% endblock %}
