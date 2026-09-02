@@ -1,0 +1,59 @@
+<!--
+    Use our base template.
+-->
+{% extends "base.html" %}
+
+
+<!--
+    Start the content section.
+-->
+{% block content %}
+
+    <!-- Page heading -->
+    <h1>Login</h1>
+
+
+    <!--
+        Login form.
+
+        POST sends the username and password
+        to Django's LoginView.
+    -->
+    <form method="POST">
+
+        <!--
+            Protect the form against CSRF attacks.
+        -->
+        {% csrf_token %}
+
+
+        <!--
+            Django's LoginView automatically
+            provides the login form.
+
+            .as_p displays the fields.
+        -->
+        {{ form.as_p }}
+
+
+        <!-- Submit button -->
+        <button type="submit">
+            Login
+        </button>
+
+    </form>
+
+
+    <!--
+        Give new users a way
+        to create an account.
+    -->
+    <p>
+        Don't have an account?
+
+        <a href="{% url 'register' %}">
+            Register
+        </a>
+    </p>
+
+{% endblock %}
