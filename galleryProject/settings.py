@@ -127,5 +127,16 @@ MAILERS = {
     },
 }
 
+#MEDIA SETTINGS
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# AUTHENTICATION SETTINGS
+# After a successful login,
+# Django sends the user to the gallery.
+LOGIN_REDIRECT_URL = "/gallery/"
+
+
+# After logout,
+# Django sends the user back to the home page.
+LOGOUT_REDIRECT_URL = "/"
