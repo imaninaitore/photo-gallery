@@ -1,13 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-from photo_gallery.models import Profile
-
-for user in User.objects.all():
-    Profile.objects.get_or_create(user=user)
-
-    exit()
-
 class Profile(models.Model):
 
     # One user can have one profile.
