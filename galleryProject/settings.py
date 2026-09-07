@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,11 +38,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'photo_gallery',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+
+    # WhiteNoise allows Django to serve static files
+    # when deployed.
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -49,6 +56,11 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+STATICFILES_STORAGE = (
+    "whitenoise.storage.CompressedManifestStaticFilesStorage"
+)
+
 
 ROOT_URLCONF = 'galleryProject.urls'
 
@@ -117,6 +129,9 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+# Folder where Django will collect static files
+# for production.
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
@@ -140,3 +155,43 @@ LOGIN_REDIRECT_URL = "/gallery/"
 # After logout,
 # Django sends the user back to the home page.
 LOGOUT_REDIRECT_URL = "/"
+
+
+# SECURITY
+# Do not show detailed error pages in production.
+DEBUG = os.getenv(
+    "DEBUG",
+    "True"
+).lower() == "true"
+
+
+# During local development, this is fine.
+# On Render, set ALLOWED_HOSTS through an environment variable.
+ALLOWED_HOSTS = os.getenv(
+    "ALLOWED_HOSTS",
+    "127.0.0.1,localhost"
+).split(",")
+
+
+# DATABASE
+
+# By default, use SQLite.
+#
+# This means the project works immediately on your computer.
+#
+# When DATABASE_URL is supplied on Render,
+# Django will use PostgreSQL instead.
+
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+if DATABASE_URL:
+
+    import dj_database_url
+
+    DATABASES = {
+        "default": dj_database_url.parse(
+            DATABASE_URL,
+            conn_max_age=600,
+            conn_health_checks=True,
+        )
+    }
