@@ -1,13 +1,33 @@
 {% extends "base.html" %}
 
+{% block title %}
+    About | Photo Gallery
+{% endblock %}
+
 {% block content %}
 
-    <h1>About Photo Gallery</h1>
-    <p>This website allows users to explore photos, portraits, and artwork.</p>
-    <p>users can view and interact with a collection of photos,
-         portraits, and artworks. Users can register for an account, 
-         log in to access personalized features, browse photos,
-          view photo details, filter photos by tags, like or dislike photos,
-           and manage their user profiles.<p>
+<div class="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow">
+
+    <h1 class="text-3xl font-bold mb-6">
+        About Photo Gallery
+    </h1>
+
+    <p class="text-gray-700 leading-7">
+
+        Photo Gallery is a Django web application where
+        users can discover, upload and share photos,
+        portraits and artwork.
+
+    </p>
+
+    <p class="text-gray-700 leading-7 mt-4">
+
+        Users can create accounts, manage their profiles,
+        upload photos, add tags, filter the gallery and
+        interact with photos using likes and dislikes.
+
+    </p>
+
+</div>
 
 {% endblock %}
