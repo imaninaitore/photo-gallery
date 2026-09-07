@@ -1,103 +1,126 @@
 {% extends "base.html" %}
 
+{% load static %}
+
 {% block title %}
     Gallery | Photo Gallery
 {% endblock %}
 
 {% block content %}
 
-<h1 class="text-3xl font-bold mb-6">
-    Photo Gallery
-</h1>
+<div class="max-w-7xl mx-auto px-6 py-12">
 
-<!-- TAG FILTERS -->
+    <!-- Page heading -->
+    <div class="text-center mb-12">
 
-<div class="flex flex-wrap gap-2 mb-8">
+        <h1 class="text-4xl md:text-5xl font-bold text-slate-900">
+            Explore the Gallery
+        </h1>
 
-    <a href="{% url 'gallery' %}"
-       class="px-4 py-2 rounded bg-slate-900 text-white">
+        <p class="text-gray-600 mt-3">
+            Discover beautiful photos, portraits and artwork.
+        </p>
 
-        All
-
-    </a>
-
-    {% for tag in tags %}
-
-        <a href="{% url 'gallery' %}?tag={{ tag.name }}"
-           class="px-4 py-2 rounded bg-white shadow">
-
-            {{ tag.name }}
-
-        </a>
-
-    {% endfor %}
-
-</div>
+    </div>
 
 
-<!-- PHOTO GRID -->
+    <!-- Photo grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
 
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for photo in photos %}
 
-    {% for photo in photos %}
+            <!-- Individual photo -->
+            <div class="group">
 
-        <div class="bg-white rounded-lg shadow overflow-hidden">
+                <!-- Photo -->
+                <a href="{% url 'photo_detail' photo.id %}">
 
-            <a href="{% url 'photo_detail' photo.id %}">
+                    <div class="aspect-[4/3] overflow-hidden rounded-xl bg-gray-200 shadow-sm">
 
-                <img src="{{ photo.image.url }}"
-                     alt="{{ photo.title }}"
-                     class="w-full h-64 object-cover">
+                        <img
+                            src="{{ photo.image.url }}"
+                            alt="{{ photo.title }}"
+                            class="w-full h-full object-cover transition duration-500 group-hover:scale-105"
+                        >
 
-            </a>
+                    </div>
 
-            <div class="p-5">
-
-                <h2 class="text-xl font-bold">
-                    {{ photo.title }}
-                </h2>
-
-                <p class="text-gray-600 mt-2">
-                    {{ photo.description|truncatewords:20 }}
-                </p>
+                </a>
 
 
-                <!-- Tags -->
+                <!-- Photo information -->
+                <div class="pt-4">
 
-                <div class="flex flex-wrap gap-2 mt-4">
+                    <div class="flex items-start justify-between gap-4">
 
-                    {% for tag in photo.tags.all %}
+                        <div>
 
-                        <a href="{% url 'gallery' %}?tag={{ tag.name }}"
-                           class="text-sm bg-gray-200 px-2 py-1 rounded">
+                            <h2 class="text-lg font-bold text-slate-900">
+                                {{ photo.title }}
+                            </h2>
 
-                            #{{ tag.name }}
+                            <p class="text-sm text-gray-500 mt-1">
+                                By {{ photo.owner.username }}
+                            </p>
 
-                        </a>
+                        </div>
 
-                    {% endfor %}
+                        <!-- Like count -->
+                        <div class="text-sm text-gray-500">
+                            ♥ {{ photo.like_count }}
+                        </div>
+
+                    </div>
+
+
+                    <!-- Tags -->
+                    {% if photo.tags.all %}
+
+                        <div class="flex flex-wrap gap-2 mt-3">
+
+                            {% for tag in photo.tags.all %}
+
+                                <span class="text-xs bg-slate-100 text-slate-700 px-2 py-1 rounded">
+                                    #{{ tag.name }}
+                                </span>
+
+                            {% endfor %}
+
+                        </div>
+
+                    {% endif %}
+
+
+                    <!-- View button -->
+                    <a
+                        href="{% url 'photo_detail' photo.id %}"
+                        class="inline-block mt-4 text-sm font-semibold text-slate-900 hover:underline"
+                    >
+                        View Photo →
+                    </a>
 
                 </div>
 
+            </div>
 
-                <p class="text-sm text-gray-500 mt-4">
+        {% empty %}
 
-                    Uploaded by
-                    {{ photo.owner.username }}
+            <!-- Shown when there are no photos -->
+            <div class="col-span-full text-center py-16">
 
+                <h2 class="text-2xl font-bold text-slate-900">
+                    No photos yet
+                </h2>
+
+                <p class="text-gray-600 mt-2">
+                    Check back later for new photos.
                 </p>
 
             </div>
 
-        </div>
+        {% endfor %}
 
-    {% empty %}
-
-        <p>
-            No photos found.
-        </p>
-
-    {% endfor %}
+    </div>
 
 </div>
 
