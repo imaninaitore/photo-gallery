@@ -17,7 +17,7 @@
             Explore the Gallery
         </h1>
 
-        <p class="text-gray-600 mt-3">
+        <p class="text-sky-600 mt-3">
             Discover beautiful photos, portraits and artwork.
         </p>
 
@@ -55,19 +55,19 @@
 
                         <div>
 
-                            <h2 class="text-lg font-bold text-slate-900">
+                            <h2 class="text-lg font-bold text-white">
                                 {{ photo.title }}
                             </h2>
 
-                            <p class="text-sm text-gray-500 mt-1">
+                            <p class="text-sm text-amber-600 mt-1">
                                 By {{ photo.owner.username }}
                             </p>
 
                         </div>
 
                         <!-- Like count -->
-                        <div class="text-sm text-gray-500">
-                            ♥ {{ photo.like_count }}
+                        <div class="text-sm text-sky-400">
+                            likes: {{ photo.like_count }}
                         </div>
 
                     </div>
@@ -92,12 +92,14 @@
 
 
                     <!-- View button -->
-                    <a
+                     <button class="bg-slate-100 rounded p-2">
+                       <a
                         href="{% url 'photo_detail' photo.id %}"
-                        class="inline-block mt-4 text-sm font-semibold text-slate-900 hover:underline"
-                    >
-                        View Photo →
-                    </a>
+                        class="inline-block text-sm font-semibold text-slate-700 ">
+                        View Photo 
+                    </a> 
+                     </button>
+                    
 
                 </div>
 
