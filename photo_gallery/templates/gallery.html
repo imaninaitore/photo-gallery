@@ -1,21 +1,104 @@
 {% extends "base.html" %}
 
+{% block title %}
+    Gallery | Photo Gallery
+{% endblock %}
+
 {% block content %}
 
-<h1>Photo Gallery</h1>
+<h1 class="text-3xl font-bold mb-6">
+    Photo Gallery
+</h1>
 
-{% for photo in photos %}
+<!-- TAG FILTERS -->
 
-    <h2>{{ photo.title }}</h2>
-#Make gallery photos clickable
-    <a href="{% url 'photo_detail' photo.id %}">
-    <img src="{{ photo.image.url }}" alt="{{ photo.title }}">
+<div class="flex flex-wrap gap-2 mb-8">
+
+    <a href="{% url 'gallery' %}"
+       class="px-4 py-2 rounded bg-slate-900 text-white">
+
+        All
+
     </a>
 
-    <p>{{ photo.description }}</p>
+    {% for tag in tags %}
 
-    <p>Tags: {{ photo.tags }}</p>
+        <a href="{% url 'gallery' %}?tag={{ tag.name }}"
+           class="px-4 py-2 rounded bg-white shadow">
 
-{% endfor %}
+            {{ tag.name }}
+
+        </a>
+
+    {% endfor %}
+
+</div>
+
+
+<!-- PHOTO GRID -->
+
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+    {% for photo in photos %}
+
+        <div class="bg-white rounded-lg shadow overflow-hidden">
+
+            <a href="{% url 'photo_detail' photo.id %}">
+
+                <img src="{{ photo.image.url }}"
+                     alt="{{ photo.title }}"
+                     class="w-full h-64 object-cover">
+
+            </a>
+
+            <div class="p-5">
+
+                <h2 class="text-xl font-bold">
+                    {{ photo.title }}
+                </h2>
+
+                <p class="text-gray-600 mt-2">
+                    {{ photo.description|truncatewords:20 }}
+                </p>
+
+
+                <!-- Tags -->
+
+                <div class="flex flex-wrap gap-2 mt-4">
+
+                    {% for tag in photo.tags.all %}
+
+                        <a href="{% url 'gallery' %}?tag={{ tag.name }}"
+                           class="text-sm bg-gray-200 px-2 py-1 rounded">
+
+                            #{{ tag.name }}
+
+                        </a>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <p class="text-sm text-gray-500 mt-4">
+
+                    Uploaded by
+                    {{ photo.owner.username }}
+
+                </p>
+
+            </div>
+
+        </div>
+
+    {% empty %}
+
+        <p>
+            No photos found.
+        </p>
+
+    {% endfor %}
+
+</div>
 
 {% endblock %}
