@@ -289,6 +289,10 @@ class ProfileTests(TestCase):
 
     def test_profile_page_loads(self):
 
+        self.client.login(
+          username="profileuser",
+          password="password123")
+
         response = self.client.get(
             reverse(
                 "profile",
