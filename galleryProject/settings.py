@@ -127,7 +127,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.1/howto/static-files/
 
+# URL used to access static files
 STATIC_URL = 'static/'
+
+# Tell Django where our project-level static folder is.
+# This is where camera.jpg is currently located.
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 
 # Folder where Django will collect static files
 # for production.
