@@ -1,58 +1,132 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
-{% block title %}{{ photo.title }} | PHOTOGALLERY{% endblock %}
+{% block title %}
+    {{ photo.title }} | Photo Gallery
+{% endblock %}
 
 {% block content %}
-<div class="max-w-5xl mx-auto space-y-6">
-    <a href="{% url 'photo_list' %}" class="inline-block text-xs uppercase tracking-widest text-brand-muted hover:text-white transition">&larr; Back to Gallery</a>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 border border-brand-border bg-brand-dark p-6">
-        <!-- Main Image -->
-        <div class="lg:col-span-2 bg-black border border-brand-border flex items-center justify-center min-h-[300px]">
-            <img src="{{ photo.image.url }}" alt="{{ photo.title }}" class="max-h-[70vh] w-auto object-contain">
+<div class="max-w-4xl mx-auto">
+
+    <img src="{{ photo.image.url }}"
+         alt="{{ photo.title }}"
+         class="w-full max-h-[700px] object-contain bg-black rounded-lg">
+
+
+    <div class="bg-white rounded-lg shadow p-6 mt-6">
+
+        <h1 class="text-3xl font-bold">
+            {{ photo.title }}
+        </h1>
+
+
+        <p class="text-gray-600 mt-4">
+            {{ photo.description }}
+        </p>
+
+
+        <p class="mt-4">
+
+            Uploaded by:
+
+            <a href="{% url 'profile' photo.owner.username %}"
+               class="text-blue-600">
+
+                {{ photo.owner.username }}
+
+            </a>
+
+        </p>
+
+
+        <!-- Tags -->
+
+        <div class="flex flex-wrap gap-2 mt-4">
+
+            {% for tag in photo.tags.all %}
+
+                <a href="{% url 'gallery' %}?tag={{ tag.name }}"
+                   class="bg-gray-200 px-3 py-1 rounded">
+
+                    #{{ tag.name }}
+
+                </a>
+
+            {% endfor %}
+
         </div>
 
-        <!-- Info Sidebar -->
-        <div class="flex flex-col justify-between space-y-6">
-            <div class="space-y-4">
-                <div class="border-b border-brand-border pb-4">
-                    <h1 class="text-2xl font-bold uppercase tracking-wider text-white">{{ photo.title }}</h1>
-                    <p class="text-xs text-brand-muted mt-1">Uploaded by <span class="text-white font-semibold">{{ photo.uploader.username }}</span> on {{ photo.uploaded_at|date:"M d, Y" }}</p>
-                </div>
+        <!-- LIKE / DISLIKE -->
 
-                {% if photo.description %}
-                    <p class="text-sm text-neutral-300 leading-relaxed">{{ photo.description }}</p>
-                {% endif %}
+        <div class="flex gap-4 mt-6">
 
-                <!-- Tags -->
-                <div class="pt-2">
-                    <span class="text-xs uppercase text-brand-muted block mb-2">Tags</span>
-                    <div class="flex flex-wrap gap-2">
-                        {% for tag in photo.tags.all %}
-                            <a href="{% url 'photo_list' %}?tag={{ tag.name }}" class="text-xs px-2.5 py-1 border border-brand-border text-brand-muted hover:border-white hover:text-white transition uppercase">
-                                #{{ tag.name }}
-                            </a>
-                        {% empty %}
-                            <span class="text-xs text-brand-muted italic">No tags</span>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
+            {% if user.is_authenticated %}
 
-            <!-- Like Interaction -->
-            <div class="border-t border-brand-border pt-4">
-                <form method="post" action="{% url 'toggle_like' photo.pk %}">
+                <form method="POST"
+                      action="{% url 'react_photo' photo.id 'like' %}">
+
                     {% csrf_token %}
-                    <button type="submit" class="w-full py-3 text-xs uppercase tracking-widest font-bold border transition flex items-center justify-center gap-2 {% if is_liked %}bg-white text-black border-white hover:bg-neutral-200{% else %}border-white text-white hover:bg-white hover:text-black{% endif %}">
-                        {% if is_liked %}
-                            &hearts; Liked ({{ photo.total_likes }})
-                        {% else %}
-                            &heartsuit; Like ({{ photo.total_likes }})
-                        {% endif %}
+
+                    <button class="bg-green-600 text-white px-4 py-2 rounded">
+
+                        Like {{ photo.like_count }}
+
                     </button>
+
                 </form>
-            </div>
+
+
+                <form method="POST"
+                      action="{% url 'react_photo' photo.id 'dislike' %}">
+
+                    {% csrf_token %}
+
+                    <button class="bg-red-600 text-white px-4 py-2 rounded">
+
+                        Dislike {{ photo.dislike_count }}
+
+                    </button>
+
+                </form>
+
+            {% else %}
+
+                <p class="text-gray-600">
+
+                    Login to like or dislike this photo.
+
+                </p>
+
+            {% endif %}
+
         </div>
+
+        <!-- OWNER CONTROLS -->
+
+        {% if user == photo.owner %}
+
+            <div class="flex gap-3 mt-8">
+
+                <a href="{% url 'edit_photo' photo.id %}"
+                   class="bg-blue-600 text-white px-4 py-2 rounded">
+
+                    Edit
+
+                </a>
+
+                <a href="{% url 'delete_photo' photo.id %}"
+                   class="bg-red-600 text-white px-4 py-2 rounded">
+
+                    Delete
+
+                </a>
+
+            </div>
+
+        {% endif %}
+
     </div>
+
 </div>
+
 {% endblock %}
