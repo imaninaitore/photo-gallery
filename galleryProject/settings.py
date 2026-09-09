@@ -25,9 +25,7 @@ SECRET_KEY = os.getenv("SECRET_KEY", "django-development-key")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-ALLOWED_HOSTS = [ 
-    "photo-gallery-esl9.onrender.com",
-]
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -176,6 +174,7 @@ DEBUG = os.getenv(
 # During local development, this is fine.
 # On Render, set ALLOWED_HOSTS through an environment variable.
 ALLOWED_HOSTS = os.getenv(
+    "photo-gallery-esl9.onrender.com",
     "ALLOWED_HOSTS",
     "127.0.0.1,localhost"
 ).split(",")
