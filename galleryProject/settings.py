@@ -25,7 +25,9 @@ SECRET_KEY = os.getenv("SECRET_KEY", "django-development-key")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [ 
+    "photo-gallery-esl9.onrender.com",
+]
 
 
 # Application definition
